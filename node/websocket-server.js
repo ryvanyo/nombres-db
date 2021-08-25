@@ -77,7 +77,7 @@ function processCola(connection){
 const sqlite3 = require('sqlite3');
 
 // Conexión a la base de datos
-const db = new sqlite3.Database('./nombres.db', function(err){
+const db = new sqlite3.Database('../nombres.db', function(err){
     if (err) {
         console.log(err.message);
     }
@@ -85,27 +85,28 @@ const db = new sqlite3.Database('./nombres.db', function(err){
 });
 
 // Creacion de la tabla usuario
-sql_create = "CREATE TABLE IF NOT EXISTS nombres('name' TEXT, 'sexo' TEXT, 'details' TEXT, PRIMARY KEY('name'))";
+sql_create = "CREATE TABLE IF NOT EXISTS nombre('name' TEXT, 'sexo' TEXT, 'details' TEXT, PRIMARY KEY('name', 'sexo'))";
 db.exec(sql_create, function(err){
     console.log('Tabla nombres creada');
 });
 
 // Insertar datos
 function insert(name, sexo, details, cn){
-    var sql_insert = "INSERT INTO nombres('name', 'sexo', 'details') VALUES(?, ?, ?)";
-
+    var sql_insert = "INSERT INTO nombre('name', 'sexo', 'details') VALUES(?, ?, ?)";
+    name = name.toLowerCase();
     db.run(sql_insert, [name, sexo, details], function(err){
         if (err) {
-            if (err.message=='SQLITE_CONSTRAINT: UNIQUE constraint failed: nombres.name') {
+            if (err.message=='SQLITE_CONSTRAINT: UNIQUE constraint failed: nombre.name, nombre.sexo') {
                 var msg = 'Error : ' + name + ' ya está guardado';
                 cn.send(msg);
                 console.log(msg);
             } else {
                 cn.send('Error : ' + err.message);
             }
+        } else {
+            cn.send('Insertado: ' + name);
+            console.log('Insertado: ' + name);
         }
-        cn.send('Insertado: ' + name);
-        console.log('Insertado: ' + name);
         processCola(cn);
     });
 }

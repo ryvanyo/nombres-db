@@ -54,6 +54,6 @@ switch($opt['algo']){
             }
         }
         
-        exec("pause");
+        // exec("pause");
         break;
 }
