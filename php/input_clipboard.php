@@ -48,9 +48,9 @@ switch($opt['algo']){
             $nombre = reset($words);
             $insertado = insert($nombre, $sexo);
             if ($insertado) {
-                echo "Insertado: ".$nombre."\n";
+                echo $nombre."\n";
             } else {
-                echo "Error: no se pudo insertar ".$nombre."\n";
+                echo "\t\t\t".$nombre." !\n";
             }
         }
         
