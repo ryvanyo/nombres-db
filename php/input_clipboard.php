@@ -43,12 +43,13 @@ switch($opt['algo']){
         $lines = explode("\n", $content);
         require_once __DIR__."/db.php";
 
+        $conta = 1;
         foreach($lines as $line){
             $words = explode(" ", trim($line));
             $nombre = reset($words);
             $insertado = insert($nombre, $sexo);
             if ($insertado) {
-                echo $nombre."\n";
+                echo $nombre."\t".($conta++)."\n";
             } else {
                 echo "\t\t\t".$nombre." !\n";
             }
